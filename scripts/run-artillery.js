@@ -130,7 +130,11 @@ function main() {
   const dirPath = path.join(baseDir, chosenDir);
   const ymlPath = path.join(dirPath, ymlFileName);
   const envPath = path.join(dirPath, ".env");
-  const reportPath = path.join(dirPath, `${ymlBaseName}.report.json`);
+  const reportsDir = path.join(dirPath, "reports");
+  if (!fs.existsSync(reportsDir)) {
+    fs.mkdirSync(reportsDir, { recursive: true });
+  }
+  const reportPath = path.join(reportsDir, `${ymlBaseName}.json`);
 
   const npxArgs = ["artillery", "run", ymlPath];
   if (fs.existsSync(envPath)) {

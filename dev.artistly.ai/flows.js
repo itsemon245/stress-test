@@ -21,7 +21,7 @@ async function personalDesignsFlow(page, vuContext) {
   await attemptAuthWithRefresh(page, authUrl, cookieName, baseURL);
 
   // ---- 2) Go to /personal-designs (don’t wait for networkidle; Echo keeps WS open)
-  await page.goto(personalPath, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  // await page.goto(personalPath, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
   // ---- 3) Wait for Echo to be connected
   await page.waitForFunction(
