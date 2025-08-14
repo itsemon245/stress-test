@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "artillery": "^2.0.24",
+    "playwright": "^1.54.2"
+  },
+  "scripts": {
+    "tests": "node ./scripts/run-artillery.js"
+  }
+}

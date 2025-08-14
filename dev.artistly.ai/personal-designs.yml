@@ -1,0 +1,29 @@
+config:
+  # Set from env at runtime (recommended). Fallback to a placeholder for readability.
+  target: "{{ $env.BASE_URL }}"
+  phases:
+    # ~10 VUs steady after a short ramp; tweak as you like
+    - duration: 5
+      arrivalRate: 2
+
+  # Playwright (Chromium) is built into Artillery:
+  engines:
+    playwright:
+      aggregateByName: true
+      showAllPageMetrics: true
+      launchOptions:
+        headless: false   # set to false for local debugging
+
+  # Your Playwright code (JS/TS) lives here:
+  processor: "./flows.js"
+
+  # Pass values into the test (can come from env via $env.*)
+  variables:
+    AUTH_URL: "{{ $env.AUTH_URL }}"           # full URL to your GET auth endpoint
+    PERSONAL_PATH: "{{ $env.PERSONAL_PATH }}" # e.g. /personal-designs
+    ECHO_TIMEOUT_MS: "{{ $env.ECHO_TIMEOUT_MS }}"
+
+scenarios:
+  - name: "Auth → /personal-designs (Echo connects)"
+    engine: playwright
+    testFunction: personalDesignsFlow
