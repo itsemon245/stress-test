@@ -3,8 +3,33 @@ config:
   target: "{{ $env.BASE_URL }}"
   phases:
     # ~10 VUs steady after a short ramp; tweak as you like
-    - duration: 5
-      arrivalRate: 2
+    - duration: 60
+      arrivalRate: 15
+
+  # Filter out asset requests from reports (they still load, just not counted)
+  http:
+    extendedMetrics: true
+    skipUnmatchedRequests: true
+    match:
+      - regexp: ".*/(personal-designs).*"
+        as: "main-requests"
+    excludeRequests:
+      - "**/*.js"
+      - "**/*.css"
+      - "**/*.png"
+      - "**/*.jpg"
+      - "**/*.jpeg"
+      - "**/*.gif"
+      - "**/*.svg"
+      - "**/*.woff*"
+      - "**/*.ttf"
+      - "**/*.eot"
+      - "**/*.ico"
+      - "**/*.webp"
+      - "**/fonts/**"
+      - "**/images/**"
+      - "**/assets/**"
+      - "**/static/**"
 
   # Playwright (Chromium) is built into Artillery:
   engines:
@@ -12,7 +37,7 @@ config:
       aggregateByName: true
       showAllPageMetrics: true
       launchOptions:
-        headless: false   # set to false for local debugging
+        headless: true   # set to false for local debugging
 
   # Your Playwright code (JS/TS) lives here:
   processor: "./flows.js"
