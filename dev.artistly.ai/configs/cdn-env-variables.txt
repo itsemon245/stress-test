@@ -1,0 +1,25 @@
+# Bunny.net CDN Configuration Variables
+# Add these to your Laravel .env file
+
+# CRITICAL: Enable CDN for all built assets
+# This tells Laravel to generate CDN URLs instead of local asset URLs
+# Impact: All /build/assets/* references will point to CDN automatically
+ASSET_URL=https://cdn.artistly.ai
+
+# CRITICAL: Vite CDN configuration for build process  
+# Used during npm run build to generate CDN-relative URLs
+# Impact: Built assets will contain CDN paths instead of relative paths
+CDN_BASE_URL=https://cdn.artistly.ai/
+
+# CRITICAL: Bunny.net Configuration (required for deployment script)
+# Get these from your Bunny.net dashboard -> Storage -> Your Zone
+BUNNY_STORAGE_ZONE=artistly-assets          # Your storage zone name (exact name from dashboard)
+BUNNY_STORAGE_PASSWORD=your_storage_password # Storage zone password (from Storage -> Zone -> FTP & HTTP API)
+BUNNY_API_KEY=your_api_key                  # API key (from Account -> API Keys)
+BUNNY_STORAGE_REGION=ny                     # Storage region: ny, la, sg, de, sy, br (check your zone's region)
+
+# Optional: Pull Zone ID for cache purging (auto-detected or manual)
+# BUNNY_PULL_ZONE_ID=your_pull_zone_id
+
+# Build optimization for CDN
+VITE_CDN_ENABLED=true

@@ -2,23 +2,23 @@ config:
   # Set from env at runtime (recommended). Fallback to a placeholder for readability.
   target: "{{ $env.BASE_URL }}"
   phases:
-    # MULTI-CONNECTION TEST: Each Chrome instance = 5 WebSocket connections
-    # Target: ~250 total WebSocket connections = 50 Chrome instances
+    # # CDN-OPTIMIZED TEST: Higher loads possible with CDN serving assets
+    # # Each Chrome instance = 4 WebSocket connections (optimized default)
     # - duration: 60
     #   arrivalRate: 1
-    #   rampTo: 2
-    #   name: "gentle-ramp"
+    #   rampTo: 3
+    #   name: "cdn-ramp-test"
 
-    # Sustained test: 1 Chrome/sec = 5 WebSocket connections/sec
-    # Peak concurrent: ~50 Chrome instances = ~250 WebSocket connections
+    # # Sustained high-load test (CDN should eliminate asset bottleneck)
+    # # Target: ~300 WebSocket connections (3 Chrome/sec × 30s × 4 connections)
+    # - duration: 180
+    #   arrivalRate: 3
+    #   name: "cdn-sustained-test"
+
+    # Cool down
     - duration: 60
       arrivalRate: 1
-      name: "multi-connection-test"
-
-    # # Cool down
-    # - duration: 30
-    #   arrivalRate: 1
-    #   name: "cooldown"
+      name: "cooldown"
 
   # Filter out asset requests from reports (they still load, just not counted)
   http:
@@ -76,7 +76,7 @@ config:
     AUTH_URL: "{{ $env.AUTH_URL }}" # full URL to your GET auth endpoint
     PERSONAL_PATH: "{{ $env.PERSONAL_PATH }}" # e.g. /personal-designs
     ECHO_TIMEOUT_MS: "{{ $env.ECHO_TIMEOUT_MS }}"
-    CONNECTIONS_PER_INSTANCE: "{{ $env.CONNECTIONS_PER_INSTANCE }}" # Default: 4 connections per Chrome (stays under asset limit)
+    CONNECTIONS_PER_INSTANCE: "{{ $env.CONNECTIONS_PER_INSTANCE }}" # Default: 4 connections per Chrome (CDN eliminates asset limits)
 
 scenarios:
   - name: "Auth → /personal-designs (Echo connects)"
